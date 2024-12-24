@@ -1,0 +1,48 @@
+using UnityEngine;
+
+public class EnemyWander : MonoBehaviour
+{
+    [Header("Movement Settings")]
+    public float moveSpeed = 2f;    // How fast the enemy moves
+    public float directionChangeTime = 2f;  // Time before changing direction
+
+    private Rigidbody2D rb;
+    private float moveDirection = 1f; 
+    private float timer;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+
+        timer = directionChangeTime;
+    }
+
+    void Update()
+    {
+        timer -= Time.deltaTime;
+
+        if (timer <= 0f)
+        {
+            ChangeDirection();
+            timer = directionChangeTime;
+        }
+
+        Move();
+    }
+
+    void Move()
+    {
+        rb.velocity = new Vector2(moveDirection * moveSpeed, rb.velocity.y);
+    }
+
+    void ChangeDirection()
+    {
+        // Reverse the movement direction (opposite direction)
+        moveDirection = moveDirection == 1f ? -1f : 1f;
+
+        // Flip the enemy's sprite to face the new direction (optional)
+        Vector3 localScale = transform.localScale;
+        localScale.x = Mathf.Sign(moveDirection) * Mathf.Abs(localScale.x);  // Flip the x scale
+        transform.localScale = localScale;
+    }
+}

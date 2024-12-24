@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Ground
+  - kedi
+  - tavuk
+  - Ladder
+  - Enemy
+  - CatHitBox
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - CatHitboxLayer
+  - ItemLayer
+  - EnemyLayer
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: 1
+    uniqueID: 3307054875
+    locked: 0
+  - name: 2
+    uniqueID: 1873602469
+    locked: 0
+  - name: 3
+    uniqueID: 1579020297
+    locked: 0
+  - name: 4
+    uniqueID: 84686237
+    locked: 0
+  - name: 5
+    uniqueID: 3701772421
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: PriorityObjects
+    uniqueID: 2514625263
+    locked: 0
+  - name: UI
+    uniqueID: 3438187177
+    locked: 0

@@ -1,0 +1,22 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class BackgroundController : MonoBehaviour
+{
+    private float startPos;
+    public GameObject cam;
+    public float parallaxEffect;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        startPos = 
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+}
