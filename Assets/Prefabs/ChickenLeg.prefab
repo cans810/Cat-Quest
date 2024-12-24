@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3653264464782888489}
   - component: {fileID: 7496986264126427009}
   - component: {fileID: 9016720659038603873}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: ChickenLeg
   m_TagString: tavuk
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca2a10b4d11fa0348a3f165859394a8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointValue: 10
+  healthValue: 10
 --- !u!70 &9016720659038603873
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

@@ -10,20 +10,27 @@ public class Cat : MonoBehaviour
 
     private Rigidbody2D rb;
     private Animator animator;
+
+    // Movement variables
     private float moveInput;
     public float playerFacingDirection = 1f;
+
+    // Ground and climbing variables
     public bool isGrounded;
     public bool isClimbing = false;
     public GameObject currentLadder;
     private float ladderXPosition;
     private Vector3 originalScale;
-    private bool isTransitioningToClimb = false;
+    private bool isTransitioningToClimb = false; // New variable to handle transition
+
+    // Attack state variable
     public CatHitBox hitBox;
     private bool isAttacking = false;
 
     [Header("Attributes")]
     public float maxHP;
     public float HP;
+
     public RuntimeAnimatorController currentSkin;
     public bool isAlive;
 
@@ -33,10 +40,14 @@ public class Cat : MonoBehaviour
         animator = GetComponent<Animator>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         rb.gravityScale = 2.5f;
+
+        // Physics settings
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+
         currentSkin = GameManager.Instance.currentCatSkin;
         animator.runtimeAnimatorController = currentSkin;
+
         isAlive = true;
         originalScale = transform.localScale;
     }
@@ -45,27 +56,54 @@ public class Cat : MonoBehaviour
     {
         if (isAttacking) return;
 
-        if (currentLadder != null && Input.GetKeyDown(KeyCode.E))
+        if (!isClimbing)
         {
-            if (!isClimbing)
+            // Normal movement logic
+            moveInput = Input.GetAxisRaw("Horizontal");
+
+            if (Input.GetButtonDown("Jump") && isGrounded)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 0f);
+                rb.AddForce(Vector2.up * jumpForce);
+                isGrounded = false;
+            }
+
+            // Facing direction
+            if (moveInput != 0)
+            {
+                transform.localScale = new Vector3(
+                    Mathf.Sign(moveInput) * Mathf.Abs(transform.localScale.x),
+                    transform.localScale.y,
+                    transform.localScale.z
+                );
+                playerFacingDirection = Mathf.Sign(moveInput);
+            }
+
+            animator.SetFloat("Speed", Mathf.Abs(moveInput));
+            animator.SetFloat("MoveX", moveInput);
+
+            // Start climbing if near a ladder and press 'E'
+            if (currentLadder != null && Input.GetKeyDown(KeyCode.E) && !isClimbing)
             {
                 StartClimbing();
             }
-            else
+        }
+        else
+        {
+            // Reset horizontal movement animation while climbing
+            animator.SetFloat("Speed", 0);
+            animator.SetFloat("MoveX", 0);
+            
+            HandleClimbing();
+
+            // Stop climbing if press 'E'
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 StopClimbing();
             }
         }
 
-        if (!isClimbing)
-        {
-            HandleNormalMovement();
-        }
-        else
-        {
-            HandleClimbing();
-        }
-
+        // Attack input
         if (Input.GetKeyDown(KeyCode.R) && !isAttacking)
         {
             StartAttack();
@@ -78,14 +116,17 @@ public class Cat : MonoBehaviour
 
         if (!isClimbing)
         {
+            // Normal movement
             ContactPoint2D[] contacts = new ContactPoint2D[10];
             int contactCount = rb.GetContacts(contacts);
+            bool isTouchingWall = false;
 
             for (int i = 0; i < contactCount; i++)
             {
                 if (Mathf.Abs(contacts[i].normal.x) > 0.7f)
                 {
                     moveInput = 0;
+                    isTouchingWall = true;
                     break;
                 }
             }
@@ -94,67 +135,55 @@ public class Cat : MonoBehaviour
         }
     }
 
-    private void HandleNormalMovement()
-    {
-        moveInput = Input.GetAxisRaw("Horizontal");
-
-        if (Input.GetButtonDown("Jump") && isGrounded)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, 0f);
-            rb.AddForce(Vector2.up * jumpForce);
-            isGrounded = false;
-        }
-
-        if (moveInput != 0)
-        {
-            transform.localScale = new Vector3(Mathf.Sign(moveInput) * Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
-            playerFacingDirection = Mathf.Sign(moveInput);
-        }
-
-        animator.SetFloat("Speed", Mathf.Abs(moveInput));
-        animator.SetFloat("MoveX", moveInput);
-    }
-
     private void StartClimbing()
     {
         isClimbing = true;
         isTransitioningToClimb = true;
+
+        // Store ladder position
         ladderXPosition = currentLadder.transform.position.x;
+
+        // Reset and freeze everything
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0f;
-        transform.position = new Vector2(ladderXPosition - 0.3f, transform.position.y + 0.2f);
+
+        // Snap to ladder position with a slight lift
+        float offsetX = -0.60f;
+        transform.position = new Vector2(ladderXPosition + offsetX, transform.position.y + currentLadder.GetComponent<Climbable>().liftOffset);
+
+        // Freeze rotation and horizontal movement
         rb.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionX;
+
+        // Set a fixed scale while climbing
         transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+
+        // Reset transition flag after a short delay
         StartCoroutine(ResetTransitionFlag());
     }
 
     private void HandleClimbing()
     {
         float verticalInput = Input.GetAxisRaw("Vertical");
-        
-        if (!isTransitioningToClimb)
+
+        // Vertical movement while climbing
+        if (Mathf.Abs(verticalInput) > 0.1f)
         {
-            if (Mathf.Abs(verticalInput) > 0.1f)
-            {
-                rb.velocity = new Vector2(0f, verticalInput * currentLadder.GetComponent<Climbable>().climbingSpeed);
-                animator.SetFloat("Speed", Mathf.Abs(verticalInput));
-            }
-            else
-            {
-                rb.velocity = Vector2.zero;
-                animator.SetFloat("Speed", 0);
-            }
+            rb.velocity = new Vector2(0f, verticalInput * currentLadder.GetComponent<Climbable>().climbingSpeed);
+        }
+        else
+        {
+            rb.velocity = Vector2.zero;
         }
 
-        transform.position = new Vector2(ladderXPosition - 0.3f, transform.position.y);
+        // Maintain the player at the ladder's X position (but free to move up/down)
+        transform.position = new Vector3(ladderXPosition, transform.position.y, transform.position.z);
     }
 
     private void StopClimbing()
     {
         isClimbing = false;
-        rb.gravityScale = 2.5f;
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        transform.localScale = new Vector3(playerFacingDirection * Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+        rb.gravityScale = 2.5f; // Restore gravity
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation; // Allow rotation again
     }
 
     private IEnumerator ResetTransitionFlag()
@@ -165,6 +194,7 @@ public class Cat : MonoBehaviour
 
     void OnCollisionStay2D(Collision2D collision)
     {
+        // Don't set grounded state if transitioning to climb
         if (!isTransitioningToClimb)
         {
             foreach (ContactPoint2D contact in collision.contacts)

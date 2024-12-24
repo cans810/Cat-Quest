@@ -119,10 +119,10 @@ public class Cat : MonoBehaviour
     {
         isClimbing = true;
         isTransitioningToClimb = true;
-        ladderXPosition = currentLadder.transform.position.x;
+        ladderXPosition = currentLadder.transform.position.x + currentLadder.GetComponent<Climbable>().horizontalOffset;
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0f;
-        transform.position = new Vector2(ladderXPosition - 0.3f, transform.position.y + 0.2f);
+        transform.position = new Vector2(ladderXPosition, transform.position.y + 0.5f);
         rb.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionX;
         transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
         StartCoroutine(ResetTransitionFlag());
@@ -146,7 +146,7 @@ public class Cat : MonoBehaviour
             }
         }
 
-        transform.position = new Vector2(ladderXPosition - 0.3f, transform.position.y);
+        transform.position = new Vector2(ladderXPosition, transform.position.y);
     }
 
     private void StopClimbing()

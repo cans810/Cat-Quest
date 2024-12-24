@@ -3,7 +3,8 @@ using UnityEngine;
 public class Climbable : MonoBehaviour
 {
     public string ladderTag = "Ladder";
-    public float climbingSpeed = 50f;
+    public float climbingSpeed = 10f;
+    public float horizontalOffset = 10f;
 
     void Start()
     {

@@ -199,14 +199,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 7
-  jumpForce: 475
+  jumpForce: 550
   playerFacingDirection: 1
   isGrounded: 0
   isClimbing: 0
+  currentLadder: {fileID: 0}
   hitBox: {fileID: 3734697674194569937}
   maxHP: 100
   HP: 0
   currentSkin: {fileID: 0}
+  isAlive: 0
 --- !u!1 &2876297834941653628
 GameObject:
   m_ObjectHideFlags: 0

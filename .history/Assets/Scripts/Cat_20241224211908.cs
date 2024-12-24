@@ -116,38 +116,38 @@ public class Cat : MonoBehaviour
     }
 
     private void StartClimbing()
-    {
-        isClimbing = true;
-        isTransitioningToClimb = true;
-        ladderXPosition = currentLadder.transform.position.x;
-        rb.velocity = Vector2.zero;
-        rb.gravityScale = 0f;
-        transform.position = new Vector2(ladderXPosition - 0.3f, transform.position.y + 0.2f);
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionX;
-        transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
-        StartCoroutine(ResetTransitionFlag());
-    }
+{
+    isClimbing = true;
+    isTransitioningToClimb = true;
+    ladderXPosition = currentLadder.transform.position.x;
+    rb.velocity = Vector2.zero;
+    rb.gravityScale = 0f;
+    transform.position = new Vector2(ladderXPosition + 0.6f, transform.position.y + 0.5f);
+    rb.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionX;
+    transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+    StartCoroutine(ResetTransitionFlag());
+}
 
-    private void HandleClimbing()
+private void HandleClimbing()
+{
+    float verticalInput = Input.GetAxisRaw("Vertical");
+    
+    if (!isTransitioningToClimb)
     {
-        float verticalInput = Input.GetAxisRaw("Vertical");
-        
-        if (!isTransitioningToClimb)
+        if (Mathf.Abs(verticalInput) > 0.1f)
         {
-            if (Mathf.Abs(verticalInput) > 0.1f)
-            {
-                rb.velocity = new Vector2(0f, verticalInput * currentLadder.GetComponent<Climbable>().climbingSpeed);
-                animator.SetFloat("Speed", Mathf.Abs(verticalInput));
-            }
-            else
-            {
-                rb.velocity = Vector2.zero;
-                animator.SetFloat("Speed", 0);
-            }
+            rb.velocity = new Vector2(0f, verticalInput * currentLadder.GetComponent<Climbable>().climbingSpeed);
+            animator.SetFloat("Speed", Mathf.Abs(verticalInput));
         }
-
-        transform.position = new Vector2(ladderXPosition - 0.3f, transform.position.y);
+        else
+        {
+            rb.velocity = Vector2.zero;
+            animator.SetFloat("Speed", 0);
+        }
     }
+
+    transform.position = new Vector2(ladderXPosition + 0.6f, transform.position.y);
+}
 
     private void StopClimbing()
     {
