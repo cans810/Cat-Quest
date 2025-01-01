@@ -13,7 +13,7 @@ public class Cat : MonoBehaviour
     [SerializeField] private LayerMask wallLayer;
 
     [Header("Wall Movement")]
-    private float wallSlidingSpeed = 5f;
+    private float wallSlidingSpeed = 2f;
     private bool isWallSliding;
     private bool isWallJumping;
     private float wallJumpingDirection;
@@ -135,19 +135,19 @@ public class Cat : MonoBehaviour
 
     private void WallSlide()
     {
-        if (IsWalled() && !IsGrounded() && horizontal != 0f)
+        // Check if the player is near a wall, not grounded, and moving horizontally
+        if (IsWalled() && !IsGrounded() && Mathf.Abs(horizontal) > 0f)
         {
             isWallSliding = true;
 
-            // Apply a constant downward velocity for sliding
-            rb.velocity = new Vector2(rb.velocity.x, -wallSlidingSpeed);
+            // Apply downward sliding velocity
+            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
         }
         else
         {
             isWallSliding = false;
         }
     }
-
 
 
     private void WallJump()

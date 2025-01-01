@@ -13,7 +13,7 @@ public class Cat : MonoBehaviour
     [SerializeField] private LayerMask wallLayer;
 
     [Header("Wall Movement")]
-    private float wallSlidingSpeed = 5f;
+    private float wallSlidingSpeed = 6f;
     private bool isWallSliding;
     private bool isWallJumping;
     private float wallJumpingDirection;

@@ -6,21 +6,21 @@ public class Cat : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float speed = 8f;
-    [SerializeField] private float jumpingPower = 4f;
+    [SerializeField] private float jumpingPower = 8f;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform wallCheck;
     [SerializeField] private LayerMask wallLayer;
 
     [Header("Wall Movement")]
-    private float wallSlidingSpeed = 5f;
+    private float wallSlidingSpeed = 2f;
     private bool isWallSliding;
     private bool isWallJumping;
     private float wallJumpingDirection;
     private float wallJumpingTime = 0.2f;
     private float wallJumpingCounter;
     private float wallJumpingDuration = 0.4f;
-    private Vector2 wallJumpingPower = new Vector2(1f, 10f);
+    private Vector2 wallJumpingPower = new Vector2(5f, 20f); // Less horizontal (5 instead of 8), more vertical (20 instead of 16)
 
     private float horizontal;
     private bool isFacingRight = true;
@@ -63,13 +63,13 @@ public class Cat : MonoBehaviour
             // Normal jump
             if (Input.GetButtonDown("Jump") && IsGrounded())
             {
-                rb.AddForce(Vector2.up * jumpingPower, ForceMode2D.Impulse);
+                rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
             }
 
-            // Option 3: Multiply the jump power by a factor
-            if (Input.GetButtonDown("Jump") && IsGrounded())
+            // Variable jump height
+            if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
             {
-                rb.velocity = new Vector2(rb.velocity.x, jumpingPower * 0.5f);
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
             }
 
             // Wall mechanics
@@ -105,12 +105,6 @@ public class Cat : MonoBehaviour
         {
             StartAttack();
         }
-
-        if (isWallSliding)
-        {
-            Debug.Log("Wall Sliding");
-        }
-
     }
 
     private void FixedUpdate()
@@ -138,17 +132,13 @@ public class Cat : MonoBehaviour
         if (IsWalled() && !IsGrounded() && horizontal != 0f)
         {
             isWallSliding = true;
-
-            // Apply a constant downward velocity for sliding
-            rb.velocity = new Vector2(rb.velocity.x, -wallSlidingSpeed);
+            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
         }
         else
         {
             isWallSliding = false;
         }
     }
-
-
 
     private void WallJump()
     {

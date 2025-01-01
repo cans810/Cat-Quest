@@ -36,6 +36,7 @@ Transform:
   m_Children:
   - {fileID: 4560281266043322749}
   - {fileID: 5543514805315005270}
+  - {fileID: 5400639848460804481}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &505110665675309972
@@ -199,17 +200,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 315bfa23faede38409aa8ab798550813, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 7
-  jumpForce: 450
-  wallJumpForceX: 800
-  wallJumpForceY: 600
-  wallSlideSpeed: 3
-  wallDetectionRadius: 0.3
+  speed: 8
+  jumpingPower: 16
+  groundCheck: {fileID: 5400639848460804481}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  wallCheck: {fileID: 5543514805315005270}
   wallLayer:
     serializedVersion: 2
-    m_Bits: 0
-  playerFacingDirection: 1
-  isGrounded: 0
+    m_Bits: 1024
   isClimbing: 0
   currentLadder: {fileID: 0}
   hitBox: {fileID: 3734697674194569937}
@@ -340,3 +340,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectsInHitbox: []
+--- !u!1 &4159727455705631217
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5400639848460804481}
+  m_Layer: 0
+  m_Name: GroundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5400639848460804481
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4159727455705631217}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.0698, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6379437915511785026}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

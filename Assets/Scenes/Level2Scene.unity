@@ -397,7 +397,7 @@ GameObject:
   - component: {fileID: 507350119}
   - component: {fileID: 507350118}
   - component: {fileID: 507350117}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tilemap Background
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -7016,7 +7016,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3164587668814828339, guid: c3312637b0a9d7d49b04e625c7e3dd28, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6602012655610549316, guid: c3312637b0a9d7d49b04e625c7e3dd28, type: 3}
       propertyPath: m_Pivot.x
@@ -7532,7 +7532,7 @@ GameObject:
   - component: {fileID: 1483953107}
   - component: {fileID: 1483953109}
   - component: {fileID: 1483953108}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tilemap Ground
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -28804,7 +28804,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 65726165153616598, guid: fa13a6c20d47aae44835b8e1d637280e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 20.868204
+      value: 17.45
       objectReference: {fileID: 0}
     - target: {fileID: 65726165153616598, guid: fa13a6c20d47aae44835b8e1d637280e, type: 3}
       propertyPath: m_LocalPosition.y

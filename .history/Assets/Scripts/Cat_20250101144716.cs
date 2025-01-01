@@ -6,14 +6,14 @@ public class Cat : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float speed = 8f;
-    [SerializeField] private float jumpingPower = 4f;
+    [SerializeField] private float jumpingPower = 2f;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform wallCheck;
     [SerializeField] private LayerMask wallLayer;
 
     [Header("Wall Movement")]
-    private float wallSlidingSpeed = 5f;
+    private float wallSlidingSpeed = 2f;
     private bool isWallSliding;
     private bool isWallJumping;
     private float wallJumpingDirection;
@@ -105,12 +105,6 @@ public class Cat : MonoBehaviour
         {
             StartAttack();
         }
-
-        if (isWallSliding)
-        {
-            Debug.Log("Wall Sliding");
-        }
-
     }
 
     private void FixedUpdate()
@@ -138,17 +132,13 @@ public class Cat : MonoBehaviour
         if (IsWalled() && !IsGrounded() && horizontal != 0f)
         {
             isWallSliding = true;
-
-            // Apply a constant downward velocity for sliding
-            rb.velocity = new Vector2(rb.velocity.x, -wallSlidingSpeed);
+            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
         }
         else
         {
             isWallSliding = false;
         }
     }
-
-
 
     private void WallJump()
     {

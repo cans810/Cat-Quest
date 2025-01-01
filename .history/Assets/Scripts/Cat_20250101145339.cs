@@ -13,7 +13,7 @@ public class Cat : MonoBehaviour
     [SerializeField] private LayerMask wallLayer;
 
     [Header("Wall Movement")]
-    private float wallSlidingSpeed = 5f;
+    private float wallSlidingSpeed = 2f;
     private bool isWallSliding;
     private bool isWallJumping;
     private float wallJumpingDirection;
@@ -134,19 +134,19 @@ public class Cat : MonoBehaviour
     }
 
     private void WallSlide()
+{
+    if (IsWalled() && !IsGrounded() && horizontal != 0f)
     {
-        if (IsWalled() && !IsGrounded() && horizontal != 0f)
-        {
-            isWallSliding = true;
+        isWallSliding = true;
 
-            // Apply a constant downward velocity for sliding
-            rb.velocity = new Vector2(rb.velocity.x, -wallSlidingSpeed);
-        }
-        else
-        {
-            isWallSliding = false;
-        }
+        // Apply a constant downward velocity for sliding
+        rb.velocity = new Vector2(rb.velocity.x, -wallSlidingSpeed);
     }
+    else
+    {
+        isWallSliding = false;
+    }
+}
 
 
 
